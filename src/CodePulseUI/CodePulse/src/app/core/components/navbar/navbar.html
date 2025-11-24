@@ -15,7 +15,12 @@
             Admin
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Categories</a></li>
+              <!-- Link to categories page - matches the route path 
+               
+                <a href="admin/categories">Categories</a>: Reloads the entire page (like traditional HTML) 
+                
+               [routerLink]: Browse without reloading the page (Single Page Application)-->
+            <li><a class="dropdown-item" [routerLink]="['admin','categories']">Categories</a></li>
           </ul>
         </li>
       </ul>
