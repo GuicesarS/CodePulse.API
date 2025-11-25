@@ -14,7 +14,7 @@ public class CategoriesController : ControllerBase
     public CategoriesController(ICategoryRepository categoryRepository) => _categoryRepository = categoryRepository;
 
     [HttpPost]
-    public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)
+    public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequestDto request)
     {
         var category = new Category
         {
@@ -51,6 +51,24 @@ public class CategoriesController : ControllerBase
                 UrlHandle = category.UrlHandle,
             });
         }
+
+        return Ok(response);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetCategoryById([FromRoute] Guid id)
+    {
+        var getCategory = await _categoryRepository.GetById(id);
+
+        if (getCategory is null)
+            return NotFound();
+
+        var response = new CategoryDto
+        {
+            Id = getCategory.Id,
+            Name = getCategory.Name,
+            UrlHandle = getCategory.UrlHandle,
+        };
 
         return Ok(response);
     }
