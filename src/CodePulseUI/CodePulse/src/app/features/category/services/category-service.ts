@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { AddCategoryRequest } from '../models/category.model';
+import { AddCategoryRequest, Category } from '../models/category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,5 +22,10 @@ export class CategoryService {
         this.addCategoryStatus.set('error');
        },
     });
+  }
+
+  getAllCategories()
+  {
+     return httpResource<Category[]>(() => `${this.apiBaseUrl}/api/Categories`);
   }
 }

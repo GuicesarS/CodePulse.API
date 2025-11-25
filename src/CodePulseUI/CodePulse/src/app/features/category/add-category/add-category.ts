@@ -15,7 +15,7 @@ export class AddCategory {
     effect(() => {
       if (this.categoryService.addCategoryStatus() === 'success') {
         console.log('Success');
-        // Redirect back to category list page - later
+        
       }
 
       if (this.categoryService.addCategoryStatus() === 'error') {
