@@ -1,8 +1,41 @@
 <div class="container">
 
     <h1 class="mt-3">Category List</h1>
-    
-    <div class="d-flex justify-content-end mt-3">   
+
+    <div class="d-flex justify-content-end mt-3">
         <a [routerLink]="['/admin', 'categories', 'add']" class="btn btn-primary">Add Category</a>
+    </div>
+
+    <div>
+        <!-- Show loading while fetching data -->
+        @if (isLoading()){
+        <p>Loading...</p>
+        }@else{
+            <!-- Show error if something went wrong -->
+            @if (isError()){
+            <p>An error occurred.</p>
+            }@else{
+                <!-- Show categories table when data is ready -->
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>UrlHandle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through each category -->
+                        @for (category of value(); track category.id){
+                        <tr>
+                            <td>{{category.id}}</td>
+                            <td>{{category.name}}</td>
+                            <td>{{category.urlHandle}}</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
     </div>
 </div>
