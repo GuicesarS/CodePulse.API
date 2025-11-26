@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class AddCategory {
 
-  private router = inject(Router);
+private router = inject(Router);
 
   constructor() {
     effect(() => {
