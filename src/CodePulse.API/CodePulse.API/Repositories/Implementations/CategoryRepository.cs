@@ -20,6 +20,20 @@ public class CategoryRepository : ICategoryRepository
         return category;
     }
 
+    public async Task<Category?> DeleteAsync(Guid id)
+    {
+       var category = await _dbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+
+        if(category is null)
+            return null;
+       
+        _dbContext.Categories.Remove(category);
+
+        await _dbContext.SaveChangesAsync();
+
+        return category;
+    }
+
     public async Task<IEnumerable<Category>> GetAllAsync()
     {
         return await _dbContext.Categories.ToListAsync();
