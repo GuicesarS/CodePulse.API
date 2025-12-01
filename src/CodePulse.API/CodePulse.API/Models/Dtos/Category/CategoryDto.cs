@@ -1,8 +1,8 @@
-﻿namespace CodePulse.API.Models.Domain;
+﻿namespace CodePulse.API.Models.Dtos.Category;
 
-public class Category
+public class CategoryDto
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string UrlHandle { get; set; } = string.Empty;
 }
