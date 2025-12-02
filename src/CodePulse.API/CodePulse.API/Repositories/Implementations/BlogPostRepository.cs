@@ -22,6 +22,8 @@ public class BlogPostRepository : IBlogPostRepository
 
     public async Task<IEnumerable<BlogPost>> GetAllAsync()
     {
-        return await _dbContext.BlogPost.ToListAsync();
+        return await _dbContext.BlogPost
+            .Include(blogPost => blogPost.Categories)
+            .ToListAsync();
     }
 }
