@@ -24,7 +24,7 @@
                         <th>Title</th>
                         <th>Short Description</th>
                         <th>Is Visible</th>
-                        <th>Author Name</th>
+                        <th>Categories</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,7 +34,12 @@
                             <td>{{blogPost.title}}</td>
                             <td>{{blogPost.shortDescription}}</td>
                             <td>{{blogPost.isVisible}}</td>
-                            <td>{{blogPost.author}}</td>
+                            <td>
+                                @for (categories of blogPost.categories; track categories.id)
+                                {
+                                   <span class="badge text-bg-secondary">{{categories.name}}</span>
+                                }
+                            </td>
                         </tr>
                     }
                 </tbody>
