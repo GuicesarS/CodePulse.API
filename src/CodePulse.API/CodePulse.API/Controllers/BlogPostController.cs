@@ -16,13 +16,13 @@ namespace CodePulse.API.Controllers
         public BlogPostController(
             IBlogPostRepository blogpostRepository,
             ICategoryRepository categoryRepository)
-        { 
+        {
             _blogpostRepository = blogpostRepository;
             _categoryRepository = categoryRepository;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePost([FromBody]CreateBlogPostRequestDto requestDto)
+        public async Task<IActionResult> CreatePost([FromBody] CreateBlogPostRequestDto requestDto)
         {
             var blogPost = new BlogPost
             {
@@ -38,7 +38,7 @@ namespace CodePulse.API.Controllers
             };
 
 
-            foreach(var categoryGuid in requestDto.Categories)
+            foreach (var categoryGuid in requestDto.Categories)
             {
                 var existingCategory = await _categoryRepository.GetById(categoryGuid);
 
@@ -104,5 +104,37 @@ namespace CodePulse.API.Controllers
             return Ok(response);
 
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBlogPostsById([FromRoute] Guid id)
+        {
+            var blogPost = await _blogpostRepository.GetByIdAsync(id);
+
+            if(blogPost is null)
+                return NotFound();
+
+            var response = new BlogPostDto
+            {
+                Title = blogPost.Title,
+                ShortDescription = blogPost.ShortDescription,
+                Content = blogPost.Content,
+                FeaturedImageUrl = blogPost.FeaturedImageUrl,
+                UrlHandle = blogPost.UrlHandle,
+                PublishedDate = blogPost.PublishedDate,
+                Author = blogPost.Author,
+                IsVisible = blogPost.IsVisible,
+                Categories = blogPost.Categories!.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    UrlHandle = c.UrlHandle
+                }).ToList()
+
+            };
+
+            return Ok(response);
+        }
+
+        
     }
 }
