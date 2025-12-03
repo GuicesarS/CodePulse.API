@@ -2,6 +2,7 @@ import { Component, effect, inject, input } from '@angular/core';
 import { BlogPostService } from '../services/blog-post-service';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownComponent } from 'ngx-markdown';
+import { CategoryService } from '../../category/services/category-service';
 
 @Component({
   selector: 'app-edit-blog-post',
@@ -12,8 +13,13 @@ import { MarkdownComponent } from 'ngx-markdown';
 export class EditBlogPost {
   id = input<string>();
   blogPostService = inject(BlogPostService);
+  categoryService = inject(CategoryService);
+
   private blogPostRef = this.blogPostService.getBlogPostById(this.id);
   blogPostResponse = this.blogPostRef.value;
+
+  private categoriesRef = this.categoryService.getAllCategories();
+  categoriesResponse = this.categoriesRef.value;
 
   editBlogPostForm = new FormGroup({
     title: new FormControl<string>('', {
@@ -60,15 +66,20 @@ export class EditBlogPost {
   });
 
   effectRef = effect(() => {
-    this.editBlogPostForm.patchValue({
+
+    if(this.blogPostResponse())
+    {
+      this.editBlogPostForm.patchValue({
       title: this.blogPostResponse()?.title,
       shortDescription: this.blogPostResponse()?.shortDescription,
       content: this.blogPostResponse()?.content,
       featuredImageUrl: this.blogPostResponse()?.featuredImageUrl,
       urlHandle: this.blogPostResponse()?.urlHandle,
+      author: this.blogPostResponse()?.author,
       publishedDate: new Date(this.blogPostResponse()?.publishedDate!).toISOString().split('T')[0],
-      //categories: this.blogPostResponse()?.categories,
+      categories: this.blogPostResponse()?.categories.map(c => c.id),
     });
+    }
 });
 
    onSubmit() {
