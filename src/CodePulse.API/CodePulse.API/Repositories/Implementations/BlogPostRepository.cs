@@ -20,6 +20,21 @@ public class BlogPostRepository : IBlogPostRepository
        return blogPost;
     }
 
+    public async Task<BlogPost?> DeleteAsync(Guid id)
+    {
+       var blogpost = await _dbContext.BlogPost.FirstOrDefaultAsync(x => x.Id == id);
+
+        if(blogpost is not null)
+        {
+            _dbContext.BlogPost.Remove(blogpost);
+
+            await _dbContext.SaveChangesAsync();
+
+            return blogpost;
+        }
+         return null;
+    }
+
     public async Task<IEnumerable<BlogPost>> GetAllAsync()
     {
         return await _dbContext.BlogPost
