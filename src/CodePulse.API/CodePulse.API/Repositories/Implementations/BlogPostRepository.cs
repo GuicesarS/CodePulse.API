@@ -33,4 +33,22 @@ public class BlogPostRepository : IBlogPostRepository
              .Include(blogPost => blogPost.Categories)
              .FirstOrDefaultAsync(blogPost => blogPost.Id == id);
     }
+
+    public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)
+    {
+        var getBlogPost = await _dbContext.BlogPost
+            .Include(c => c.Categories)
+            .FirstOrDefaultAsync(x => x.Id == blogPost.Id);
+
+        if (getBlogPost is null)
+            return null;
+
+        _dbContext.Entry(getBlogPost).CurrentValues.SetValues(blogPost);
+
+        getBlogPost.Categories = blogPost.Categories;
+
+        await _dbContext.SaveChangesAsync();
+
+        return blogPost; 
+    }
 }

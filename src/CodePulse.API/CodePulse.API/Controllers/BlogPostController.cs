@@ -135,6 +135,59 @@ namespace CodePulse.API.Controllers
             return Ok(response);
         }
 
-        
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBlogPost([FromRoute] Guid id, UpdateBlogPostRequestDto requestDto)
+        {
+            var blogPost = new BlogPost
+            {
+                Id = id,
+                Title = requestDto.Title,
+                ShortDescription = requestDto.ShortDescription,
+                Content = requestDto.Content,
+                FeaturedImageUrl = requestDto.FeaturedImageUrl,
+                UrlHandle = requestDto.UrlHandle,
+                PublishedDate = requestDto.PublishedDate,
+                Author = requestDto.Author,
+                IsVisible = requestDto.IsVisible,
+                Categories = new List<Category>()
+            };
+
+            foreach(var categoryGuid in requestDto.Categories)
+            {
+                var existingCategory = await _categoryRepository.GetById(categoryGuid);
+
+                if(existingCategory is not null)
+                {
+                    blogPost.Categories!.Add(existingCategory);
+                }
+            }
+
+            var updatedblogPost = await _blogpostRepository.UpdateAsync(blogPost);
+
+            if(updatedblogPost is null)
+                return NotFound();
+
+            var response = new BlogPostDto
+            {
+                Title = blogPost.Title,
+                ShortDescription = blogPost.ShortDescription,
+                Content = blogPost.Content,
+                FeaturedImageUrl = blogPost.FeaturedImageUrl,
+                UrlHandle = blogPost.UrlHandle,
+                PublishedDate = blogPost.PublishedDate,
+                Author = blogPost.Author,
+                IsVisible = blogPost.IsVisible,
+                Categories = blogPost.Categories!.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    UrlHandle = c.UrlHandle
+                }).ToList()
+
+            };
+
+            return Ok(response);
+        }
+
     }
 }
