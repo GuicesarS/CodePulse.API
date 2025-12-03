@@ -24,3 +24,4 @@ export interface AddBlogPostRequest {
     isVisible: boolean;
     categories: string[];
 }
+

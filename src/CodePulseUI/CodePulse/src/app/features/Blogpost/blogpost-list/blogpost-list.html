@@ -25,6 +25,7 @@
                         <th>Short Description</th>
                         <th>Is Visible</th>
                         <th>Categories</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,6 +40,9 @@
                                 {
                                    <span class="badge text-bg-secondary">{{categories.name}}</span>
                                 }
+                            </td>
+                            <td>
+                                <a class="btn btn-light" [routerLink]="['/admin/blogposts/edit', blogPost.id]">Edit</a>
                             </td>
                         </tr>
                     }
