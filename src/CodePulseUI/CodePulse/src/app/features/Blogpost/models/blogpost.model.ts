@@ -7,7 +7,7 @@ export interface BlogPost {
     content: string;
     featuredImageUrl: string;
     urlHandle: string;
-    publishedDate: Date;
+    publishedDate: string;
     author: string;
     isVisible: boolean;
     categories: Category[]
