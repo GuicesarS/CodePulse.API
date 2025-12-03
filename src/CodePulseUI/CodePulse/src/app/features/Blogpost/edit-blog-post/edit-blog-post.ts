@@ -3,6 +3,8 @@ import { BlogPostService } from '../services/blog-post-service';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownComponent } from 'ngx-markdown';
 import { CategoryService } from '../../category/services/category-service';
+import { UpdateBlogPostRequest } from '../models/blogpost.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-blog-post',
@@ -14,6 +16,7 @@ export class EditBlogPost {
   id = input<string>();
   blogPostService = inject(BlogPostService);
   categoryService = inject(CategoryService);
+  router = inject(Router);
 
   private blogPostRef = this.blogPostService.getBlogPostById(this.id);
   blogPostResponse = this.blogPostRef.value;
@@ -29,7 +32,7 @@ export class EditBlogPost {
 
     shortDescription: new FormControl<string>('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(200), Validators.minLength(10)]
+      validators: [Validators.required, Validators.maxLength(500), Validators.minLength(10)]
     }),
 
     content: new FormControl<string>('', {
@@ -67,45 +70,49 @@ export class EditBlogPost {
 
   effectRef = effect(() => {
 
-    if(this.blogPostResponse())
-    {
+    if (this.blogPostResponse()) {
       this.editBlogPostForm.patchValue({
-      title: this.blogPostResponse()?.title,
-      shortDescription: this.blogPostResponse()?.shortDescription,
-      content: this.blogPostResponse()?.content,
-      featuredImageUrl: this.blogPostResponse()?.featuredImageUrl,
-      urlHandle: this.blogPostResponse()?.urlHandle,
-      author: this.blogPostResponse()?.author,
-      publishedDate: new Date(this.blogPostResponse()?.publishedDate!).toISOString().split('T')[0],
-      categories: this.blogPostResponse()?.categories.map(c => c.id),
-    });
+        title: this.blogPostResponse()?.title,
+        shortDescription: this.blogPostResponse()?.shortDescription,
+        content: this.blogPostResponse()?.content,
+        featuredImageUrl: this.blogPostResponse()?.featuredImageUrl,
+        urlHandle: this.blogPostResponse()?.urlHandle,
+        author: this.blogPostResponse()?.author,
+        publishedDate: new Date(this.blogPostResponse()?.publishedDate!).toISOString().split('T')[0],
+        categories: this.blogPostResponse()?.categories.map(c => c.id),
+      });
     }
-});
+  });
 
-   onSubmit() {
+  onSubmit() {
 
-    console.log(this.editBlogPostForm.getRawValue());
-      // const formRawValue = this.addBlogPostForm.getRawValue();
-      // const request: AddBlogPostRequest = {
-      //   title: formRawValue.title,
-      //   shortDescription: formRawValue.shortDescription,
-      //   content: formRawValue.content,
-      //   featuredImageUrl: formRawValue.featuredImageUrl,
-      //   urlHandle: formRawValue.urlHandle,
-      //   publishedDate: new Date(formRawValue.publishedDate),
-      //   author: formRawValue.author,
-      //   isVisible: formRawValue.isVisible,
-      //   categories: formRawValue.categories ?? [],
-      // }
-      // this.blogPostService.createBlogPost(request)
-      // .subscribe({
-      //   next: (response) => {
-      //     console.log(response);
-      //     this.router.navigate(['admin/blogposts']);
-      //   },
-      //   error: () => {
-      //     console.error('Something went wrong!');
-      //   },
-      // });
+    const id = this.id();
+    if (id && this.editBlogPostForm.valid) {
+      const formRawValue = this.editBlogPostForm.getRawValue();
+
+      const updateBlogPostRequest: UpdateBlogPostRequest =
+      {
+        title: formRawValue.title,
+        shortDescription: formRawValue.shortDescription,
+        content: formRawValue.content,
+        featuredImageUrl: formRawValue.featuredImageUrl,
+        urlHandle: formRawValue.urlHandle,
+        publishedDate: new Date(formRawValue.publishedDate),
+        author: formRawValue.author,
+        isVisible: formRawValue.isVisible,
+        categories: formRawValue.categories ?? [],
+      }
+      this.blogPostService.updateBlogPost(id, updateBlogPostRequest)
+        .subscribe({
+          next: (response) => {
+            console.log(response);
+            this.router.navigate(['/admin/blogposts']);
+          },
+          error: () => {
+            console.error('Something went wrong!');
+          },
+        });
     }
+  }
 }
+

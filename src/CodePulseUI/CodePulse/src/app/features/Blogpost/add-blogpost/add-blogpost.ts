@@ -4,13 +4,12 @@ import { BlogPostService } from '../services/blog-post-service';
 import { AddBlogPostRequest } from '../models/blogpost.model';
 import { Router } from '@angular/router';
 import { MarkdownComponent } from 'ngx-markdown';
-import { CommonModule } from '@angular/common';
 import { CategoryService } from '../../category/services/category-service';
 
 
 @Component({
   selector: 'app-add-blogpost',
-  imports: [ReactiveFormsModule, MarkdownComponent, CommonModule],
+  imports: [ReactiveFormsModule, MarkdownComponent],
   templateUrl: './add-blogpost.html',
   styleUrl: './add-blogpost.css',
 })
@@ -84,7 +83,7 @@ export class AddBlogpost {
     .subscribe({
       next: (response) => {
         console.log(response);
-        this.router.navigate(['admin/blogposts']);
+        this.router.navigate(['/admin/blogposts']);
       },
       error: () => {
         console.error('Something went wrong!');

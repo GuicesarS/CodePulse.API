@@ -115,6 +115,7 @@ namespace CodePulse.API.Controllers
 
             var response = new BlogPostDto
             {
+                Id = blogPost.Id,
                 Title = blogPost.Title,
                 ShortDescription = blogPost.ShortDescription,
                 Content = blogPost.Content,
@@ -136,48 +137,54 @@ namespace CodePulse.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBlogPost([FromRoute] Guid id, UpdateBlogPostRequestDto requestDto)
+        public async Task<IActionResult> UpdateBlogPost(
+            [FromRoute] Guid id, 
+            [FromBody] UpdateBlogPostRequestDto requestDto)
         {
-            var blogPost = new BlogPost
-            {
-                Id = id,
-                Title = requestDto.Title,
-                ShortDescription = requestDto.ShortDescription,
-                Content = requestDto.Content,
-                FeaturedImageUrl = requestDto.FeaturedImageUrl,
-                UrlHandle = requestDto.UrlHandle,
-                PublishedDate = requestDto.PublishedDate,
-                Author = requestDto.Author,
-                IsVisible = requestDto.IsVisible,
-                Categories = new List<Category>()
-            };
+            var existingBlogPost = await _blogpostRepository.GetByIdAsync(id);
 
-            foreach(var categoryGuid in requestDto.Categories)
+            if (existingBlogPost is null)
+                return NotFound();
+            else
+            {
+                existingBlogPost.Title = requestDto.Title;
+                existingBlogPost.ShortDescription = requestDto.ShortDescription;
+                existingBlogPost.Content = requestDto.Content;
+                existingBlogPost.FeaturedImageUrl = requestDto.FeaturedImageUrl;
+                existingBlogPost.UrlHandle = requestDto.UrlHandle;
+                existingBlogPost.PublishedDate = requestDto.PublishedDate;
+                existingBlogPost.Author = requestDto.Author;
+                existingBlogPost.IsVisible = requestDto.IsVisible;
+            }
+
+            existingBlogPost.Categories?.Clear();
+
+            foreach (var categoryGuid in requestDto.Categories)
             {
                 var existingCategory = await _categoryRepository.GetById(categoryGuid);
 
                 if(existingCategory is not null)
                 {
-                    blogPost.Categories!.Add(existingCategory);
+                    existingBlogPost.Categories!.Add(existingCategory);
                 }
             }
 
-            var updatedblogPost = await _blogpostRepository.UpdateAsync(blogPost);
+            var updatedblogPost = await _blogpostRepository.UpdateAsync(existingBlogPost);
 
             if(updatedblogPost is null)
                 return NotFound();
 
             var response = new BlogPostDto
             {
-                Title = blogPost.Title,
-                ShortDescription = blogPost.ShortDescription,
-                Content = blogPost.Content,
-                FeaturedImageUrl = blogPost.FeaturedImageUrl,
-                UrlHandle = blogPost.UrlHandle,
-                PublishedDate = blogPost.PublishedDate,
-                Author = blogPost.Author,
-                IsVisible = blogPost.IsVisible,
-                Categories = blogPost.Categories!.Select(c => new CategoryDto
+                Title = existingBlogPost.Title,
+                ShortDescription = existingBlogPost.ShortDescription,
+                Content = existingBlogPost.Content,
+                FeaturedImageUrl = existingBlogPost.FeaturedImageUrl,
+                UrlHandle = existingBlogPost.UrlHandle,
+                PublishedDate = existingBlogPost.PublishedDate,
+                Author = existingBlogPost.Author,
+                IsVisible = existingBlogPost.IsVisible,
+                Categories = existingBlogPost.Categories!.Select(c => new CategoryDto
                 {
                     Id = c.Id,
                     Name = c.Name,
