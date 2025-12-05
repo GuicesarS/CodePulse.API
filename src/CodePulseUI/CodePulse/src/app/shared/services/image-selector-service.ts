@@ -1,9 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient, httpResource, HttpResourceRef } from '@angular/common/http';
+import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BlogImage } from '../models/image.model';
 import { environment } from '../../../environments/environment';
-
 
 @Injectable({
   providedIn: 'root',
@@ -30,5 +29,12 @@ export class ImageSelectorService {
     formData.append('title', title);
 
     return this.http.post<BlogImage>(`${environment.apiBaseUrl}/api/Images`, formData); 
+  }
+
+  getAllImages(id:WritableSignal<string|undefined>): HttpResourceRef<BlogImage[] | undefined>{
+   return httpResource<BlogImage[]>(()=> {
+    id();
+    return`${environment.apiBaseUrl}/api/Images`
+  });
   }
 }
