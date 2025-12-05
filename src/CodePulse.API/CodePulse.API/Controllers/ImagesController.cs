@@ -53,6 +53,24 @@ public class ImagesController : ControllerBase
 
         return BadRequest(ModelState);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllImages()
+    {
+        var blogImages = await _imageRepository.GetAllAsync();
+
+        var response = blogImages.Select(blogImage => new BlogImageDto
+        {
+            Id = blogImage.Id,
+            FileExtension = blogImage.FileExtension,
+            FileName = blogImage.FileName,
+            Title = blogImage.Title,
+            Url = blogImage.Url,
+            DateCreated = blogImage.DateCreated
+        });
+
+        return Ok(response);
+    }
     private void ValidateForm(IFormFile file)
     {
         var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
