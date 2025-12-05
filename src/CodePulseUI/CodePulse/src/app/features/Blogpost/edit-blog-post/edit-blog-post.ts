@@ -6,6 +6,7 @@ import { CategoryService } from '../../category/services/category-service';
 import { UpdateBlogPostRequest } from '../models/blogpost.model';
 import { Router } from '@angular/router';
 import { ImageSelector } from '../../../shared/components/image-selector/image-selector';
+import { ImageSelectorService } from '../../../shared/services/image-selector-service';
 
 @Component({
   selector: 'app-edit-blog-post',
@@ -18,6 +19,7 @@ export class EditBlogPost {
   blogPostService = inject(BlogPostService);
   categoryService = inject(CategoryService);
   router = inject(Router);
+  imageSelectorService = inject(ImageSelectorService);
 
   private blogPostRef = this.blogPostService.getBlogPostById(this.id);
   blogPostResponse = this.blogPostRef.value;
@@ -132,5 +134,12 @@ export class EditBlogPost {
       });
     }
   }
+
+  openImageSelector()
+  {
+    this.imageSelectorService.displayImageSelector();
+  }
+
+
 }
 
