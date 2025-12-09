@@ -1,13 +1,22 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { BlogPostService } from '../../Blogpost/services/blog-post-service';
+import { DatePipe } from '@angular/common';
+import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
   selector: 'app-blog-details',
-  imports: [],
+  imports: [DatePipe, MarkdownComponent],
   templateUrl: './blog-details.html',
   styleUrl: './blog-details.css',
 })
 export class BlogDetails {
 url = input<string | undefined>();
 
-//fetch blog details using the url parameter
+blogPostService = inject(BlogPostService)
+blogDetailsRef = this.blogPostService.getBlogPostByUrlHandle(this.url);
+
+isLoading = this.blogDetailsRef.isLoading;
+blogDetailsResponse = this.blogDetailsRef.value;
+
+
 }
