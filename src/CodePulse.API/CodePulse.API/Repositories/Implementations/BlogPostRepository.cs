@@ -49,6 +49,13 @@ public class BlogPostRepository : IBlogPostRepository
              .FirstOrDefaultAsync(blogPost => blogPost.Id == id);
     }
 
+    public async Task<BlogPost?> GetByUrlHandleAsync(string urlHandle)
+    {
+        return await _dbContext.BlogPost
+            .Include(blogPost => blogPost.Categories)
+            .FirstOrDefaultAsync(blogPost => blogPost.UrlHandle == urlHandle);
+    }
+
     public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)
     {
         var getBlogPost = await _dbContext.BlogPost
