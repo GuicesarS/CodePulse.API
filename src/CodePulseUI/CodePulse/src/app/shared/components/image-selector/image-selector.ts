@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ImageSelectorService } from '../../services/image-selector-service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { BlogImage } from '../../models/image.model';
 
 
 @Component({
@@ -73,5 +74,10 @@ export class ImageSelector {
     });
   }
 
+  onSelectImage(image: BlogImage)
+  {
+    this.imageSelectorService.selectImage(image.url);
+    this.hideImageSelector();
+  }
 
 }
