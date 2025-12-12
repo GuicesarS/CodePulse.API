@@ -1,4 +1,4 @@
-﻿namespace CodePulse.API.Models.Dtos.Auth;
+﻿namespace CodePulse.API.Models.Dtos.Requests.Auth;
 
 public class AuthRequestDto
 {

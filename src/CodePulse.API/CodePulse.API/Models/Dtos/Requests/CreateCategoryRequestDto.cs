@@ -1,7 +1,7 @@
-﻿namespace CodePulse.API.Models.Dtos.Category;
+﻿namespace CodePulse.API.Models.Dtos.Requests;
 
-public class UpdateCategoryRequestDto
-{   
+public class CreateCategoryRequestDto
+{
     public string Name { get; set; } = string.Empty;
     public string UrlHandle { get; set; } = string.Empty;
-}
+ }

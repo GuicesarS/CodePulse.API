@@ -1,4 +1,4 @@
-﻿namespace CodePulse.API.Models.Dtos.BlogImage;
+﻿namespace CodePulse.API.Models.Dtos.Requests;
 
 public class UploadImageRequest
 {

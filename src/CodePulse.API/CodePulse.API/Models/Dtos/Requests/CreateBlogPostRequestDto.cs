@@ -1,4 +1,4 @@
-﻿namespace CodePulse.API.Models.Dtos.BlogPost;
+﻿namespace CodePulse.API.Models.Dtos.Requests;
 
 public class CreateBlogPostRequestDto
 {

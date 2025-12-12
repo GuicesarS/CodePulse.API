@@ -1,5 +1,6 @@
 ﻿using CodePulse.API.Models.Domain;
 using CodePulse.API.Models.Dtos.BlogImage;
+using CodePulse.API.Models.Dtos.Requests;
 using CodePulse.API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
