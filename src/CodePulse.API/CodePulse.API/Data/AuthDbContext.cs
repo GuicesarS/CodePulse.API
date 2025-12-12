@@ -22,14 +22,14 @@ public class AuthDbContext: IdentityDbContext
             {
                  Id = readerRoleId,
                  Name = "Reader",
-                 NormalizedName = "reader".ToUpper(),
+                 NormalizedName = "Reader".ToUpper(),
                  ConcurrencyStamp = readerRoleId
             },
             new IdentityRole()
             {
                  Id = writerRoleId,
                  Name = "Writer",
-                 NormalizedName = "writer".ToUpper(),
+                 NormalizedName = "Writer".ToUpper(),
                  ConcurrencyStamp = writerRoleId
             }
         };
@@ -55,13 +55,13 @@ public class AuthDbContext: IdentityDbContext
 
         var adminRoles = new List<IdentityUserRole<string>>()
         {
-            
-            new()
+
+            new IdentityUserRole<string>
             {
                 UserId = adminUserId,    
                 RoleId = readerRoleId    
             },
-            new()
+            new IdentityUserRole<string>
             {
                 UserId = adminUserId,   
                 RoleId = writerRoleId  
