@@ -108,7 +108,7 @@ namespace CodePulse.API.Controllers
 
         }
 
-        [HttpGet("{id:Guid}")]
+        [HttpGet("id/{id:Guid}")]
         public async Task<IActionResult> GetBlogPostsById([FromRoute] Guid id)
         {
             var blogPost = await _blogpostRepository.GetByIdAsync(id);
@@ -139,7 +139,7 @@ namespace CodePulse.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{urlHandle}")]
+        [HttpGet("url/{urlHandle}")]
         public async Task<IActionResult> GetBlogPostByUrlHandle([FromRoute] string urlHandle)
         {
             var blogPost = await _blogpostRepository.GetByUrlHandleAsync(urlHandle);
