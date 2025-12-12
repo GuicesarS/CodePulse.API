@@ -16,6 +16,7 @@ public class CategoriesController : ControllerBase
     public CategoriesController(ICategoryRepository categoryRepository) => _categoryRepository = categoryRepository;
 
     [HttpPost]
+    [Authorize(Roles = "Writer")]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequestDto request)
     {
         var category = new Category
@@ -76,6 +77,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Writer")]
     public async Task<IActionResult> UpdateCategory([FromRoute] Guid id, UpdateCategoryRequestDto requestDto)
     {
         var category = new Category
@@ -101,6 +103,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Writer")]
     public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
     {
         var category = await _categoryRepository.DeleteAsync(id);
