@@ -7,6 +7,7 @@ import { AddBlogpost } from './features/Blogpost/add-blogpost/add-blogpost';
 import { EditBlogPost } from './features/Blogpost/edit-blog-post/edit-blog-post';
 import { BlogDetails } from './features/public/blog-details/blog-details';
 import { Home } from './features/public/home/home';
+import { Login } from './features/Auth/login/login';
 
 export const routes: Routes = [
     {
@@ -40,6 +41,10 @@ export const routes: Routes = [
     {
         path: '',
         component: Home
+    },
+    {
+        path: 'login',
+        component: Login
     }
 
 ];
