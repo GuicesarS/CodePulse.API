@@ -14,41 +14,49 @@ export class AuthService {
   user = signal<User | null>(null);
   router = inject(Router);
 
-  loadUser(): HttpResourceRef<User | undefined>
-  {
-    return httpResource<User>(() =>{
+  loadUser(): HttpResourceRef<User | undefined> {
+    return httpResource<User>(() => {
       const request: HttpResourceRequest = {
         url: `${environment.apiBaseUrl}/api/auth/users`,
-        withCredentials : true
+        withCredentials: true
       }
 
       return request;
     });
   }
 
-  login(email: string, password:string) : Observable<LoginResponse>
-  {
+  login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${environment.apiBaseUrl}/api/auth/login`, {
       email: email,
       password: password
-    },{
+    }, {
       withCredentials: true
     }).pipe(
-      tap((userResponse) => this.user.set(userResponse))
+      tap((userResponse) => this.setUser(userResponse))
     )
   }
 
-  logout()
-  {
-    this.http.post<void>(`${environment.apiBaseUrl}/api/auth/logout`, {},{
+  logout() {
+    this.http.post<void>(`${environment.apiBaseUrl}/api/auth/logout`, {}, {
       withCredentials: true
     }).subscribe({
-      next:() =>{
-        this.user.set(null);
+      next: () => {
+        this.setUser(null);
         this.router.navigate(['']);
       }
     })
   }
 
+  setUser(updatedUser: User | null) {
+    if (updatedUser) {
+      this.user.set({
+        email: updatedUser.email,
+        roles: updatedUser.roles.map(r => r.toLowerCase())
+      })
+    }else{
+      this.user.set(null);
+    }
+
+  }
 
 }
