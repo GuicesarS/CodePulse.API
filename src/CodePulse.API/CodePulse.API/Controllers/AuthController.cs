@@ -1,8 +1,10 @@
 ﻿using CodePulse.API.Models.Dtos.Requests.Auth;
 using CodePulse.API.Models.Dtos.Responses;
 using CodePulse.API.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CodePulse.API.Controllers;
 
@@ -100,5 +102,21 @@ public class AuthController : ControllerBase
         }
 
         return ValidationProblem(ModelState);
+    }
+
+    [Authorize]
+    [HttpGet("users")]
+    public IActionResult UserDetails()
+    {
+        if(User.Identity == null || !User.Identity.IsAuthenticated)
+            return Unauthorized();
+
+        var response = new LoginResponseDto
+        {
+            Email = User.FindFirst(ClaimTypes.Email)?.Value,
+            Roles = User.FindAll(ClaimTypes.Role).Select(x => x.Value).ToList()
+        };
+
+        return Ok(response);
     }
 }
