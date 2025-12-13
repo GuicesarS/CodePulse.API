@@ -38,9 +38,16 @@ public class AuthController : ControllerBase
                 {
                     Email = loginRequest.Email,
                     Roles = roles.ToList(),
-                    Token = token
-
+                 
                 };
+
+                Response.Cookies.Append("access_token", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Lax,
+                    Expires = DateTime.UtcNow.AddMinutes(15)
+                });
 
                 return Ok(response);
             }
