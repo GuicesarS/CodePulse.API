@@ -24,12 +24,12 @@ export class BlogPostService {
 
   getBlogPostById(id: InputSignal<string | undefined>): HttpResourceRef<BlogPost | undefined>
   {
-    return httpResource<BlogPost>(()=> `${this.apiBaseUrl}/api/BlogPost/${id()}`)
+    return httpResource<BlogPost>(()=> `${this.apiBaseUrl}/api/BlogPost/id/${id()}`)
   }
 
   getBlogPostByUrlHandle(urlHandle: InputSignal<string | undefined>): HttpResourceRef<BlogPost | undefined>
   {
-    return httpResource<BlogPost>(()=> `${this.apiBaseUrl}/api/BlogPost/${urlHandle()}`)
+    return httpResource<BlogPost>(()=> `${this.apiBaseUrl}/api/BlogPost/url/${urlHandle()}`)
   }
 
   updateBlogPost(id:string, body: UpdateBlogPostRequest): Observable<BlogPost>
