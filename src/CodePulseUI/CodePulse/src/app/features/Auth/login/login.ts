@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../service/auth-service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -12,6 +13,7 @@ import { AuthService } from '../service/auth-service';
 export class Login {
 
   authService = inject(AuthService);
+  router = inject(Router);
 
   loginFormGroup = new FormGroup({
 
@@ -41,6 +43,7 @@ export class Login {
       .subscribe({
         next: (response) => {
           console.log(response);
+          this.router.navigate(['']);
         },
         error: () => {
           console.error('Something went wrong!')

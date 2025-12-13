@@ -1,6 +1,6 @@
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { LoginResponse } from '../models/auth.model';
+import { inject, Injectable, signal } from '@angular/core';
+import { Observable, tap } from 'rxjs';
+import { LoginResponse, User } from '../models/auth.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
@@ -10,6 +10,7 @@ import { environment } from '../../../../environments/environment';
 export class AuthService {
 
   http = inject(HttpClient);
+  user = signal<User | null>(null);
 
   login(email: string, password:string) : Observable<LoginResponse>
   {
@@ -18,6 +19,8 @@ export class AuthService {
       password: password
     },{
       withCredentials: true
-    })
+    }).pipe(
+      tap((userResponse) => this.user.set(userResponse))
+    )
   }
 }
