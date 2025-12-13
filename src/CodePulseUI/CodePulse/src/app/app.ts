@@ -12,6 +12,7 @@ import { AuthService } from './features/Auth/service/auth-service';
 })
 export class App {
   protected readonly title = signal('CodePulse');
+
   authService = inject(AuthService);
 
   loadUserRef = this.authService.loadUser();
@@ -24,4 +25,5 @@ export class App {
       this.authService.user.set(userValue);
     }
   });
+  
 }

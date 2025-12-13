@@ -3,6 +3,7 @@ import { Observable, tap } from 'rxjs';
 import { LoginResponse, User } from '../models/auth.model';
 import { HttpClient, httpResource, HttpResourceRef, HttpResourceRequest } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,8 @@ export class AuthService {
 
   http = inject(HttpClient);
   user = signal<User | null>(null);
+  router = inject(Router);
+
   loadUser(): HttpResourceRef<User | undefined>
   {
     return httpResource<User>(() =>{
@@ -33,6 +36,18 @@ export class AuthService {
     }).pipe(
       tap((userResponse) => this.user.set(userResponse))
     )
+  }
+
+  logout()
+  {
+    this.http.post<void>(`${environment.apiBaseUrl}/api/auth/logout`, {},{
+      withCredentials: true
+    }).subscribe({
+      next:() =>{
+        this.user.set(null);
+        this.router.navigate(['']);
+      }
+    })
   }
 
 

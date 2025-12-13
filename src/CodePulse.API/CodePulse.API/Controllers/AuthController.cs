@@ -4,6 +4,7 @@ using CodePulse.API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 
 namespace CodePulse.API.Controllers;
@@ -119,4 +120,20 @@ public class AuthController : ControllerBase
 
         return Ok(response);
     }
+
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        //override the previous cookie
+        Response.Cookies.Append("access_token", "", new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Lax,
+            Expires = DateTime.UtcNow.AddDays(-1)
+        });
+
+        return Ok();
+    }
+
 }
