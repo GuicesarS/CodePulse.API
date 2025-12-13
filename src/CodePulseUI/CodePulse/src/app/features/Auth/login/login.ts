@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../service/auth-service';
 
 
 @Component({
@@ -9,32 +10,41 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './login.css',
 })
 export class Login {
-loginFormGroup = new FormGroup({
 
-  email: new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.required]
-  }),
+  authService = inject(AuthService);
 
-  password: new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.required, Validators.minLength(6)]
-  }),
+  loginFormGroup = new FormGroup({
 
-});
+    email: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required]
+    }),
 
-get emailFormControl()
-{
-  return this.loginFormGroup.controls.email;
-}
+    password: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(6)]
+    }),
 
-get passwordFormControl()
-{
-  return this.loginFormGroup.controls.password;
-}
+  });
 
-onSubmit(){
-const formRawValue = this.loginFormGroup.getRawValue();
-console.log(formRawValue);
-}
+  get emailFormControl() {
+    return this.loginFormGroup.controls.email;
+  }
+
+  get passwordFormControl() {
+    return this.loginFormGroup.controls.password;
+  }
+
+  onSubmit() {
+    const formRawValue = this.loginFormGroup.getRawValue();
+    this.authService.login(formRawValue.email, formRawValue.password)
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+        },
+        error: () => {
+          console.error('Something went wrong!')
+        }
+      });
+  }
 }
