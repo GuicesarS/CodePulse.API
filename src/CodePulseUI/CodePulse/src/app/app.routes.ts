@@ -8,31 +8,38 @@ import { EditBlogPost } from './features/Blogpost/edit-blog-post/edit-blog-post'
 import { BlogDetails } from './features/public/blog-details/blog-details';
 import { Home } from './features/public/home/home';
 import { Login } from './features/Auth/login/login';
+import { adminGuard } from './features/Auth/guards/admin-guard';
 
 export const routes: Routes = [
     {
         path: 'admin/categories',
-        component: CategoryList
+        component: CategoryList,
+        canActivate:[adminGuard]
     },
     {
         path: 'admin/categories/add',
-        component: AddCategory
+        component: AddCategory,
+        canActivate:[adminGuard]
     },
     {
         path: 'admin/categories/edit/:id',
-        component: EditCategory
+        component: EditCategory,
+        canActivate:[adminGuard]
     },
     {
         path: 'admin/blogposts',
-        component: BlogpostList
+        component: BlogpostList,
+        canActivate:[adminGuard]
     },
     {
         path: 'admin/blogposts/add',
-        component: AddBlogpost
+        component: AddBlogpost,
+        canActivate:[adminGuard]
     },
     {
         path: 'admin/blogposts/edit/:id',
-        component: EditBlogPost
+        component: EditBlogPost,
+        canActivate:[adminGuard]
     },
     {
         path: 'blog/:url',
