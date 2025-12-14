@@ -14,7 +14,9 @@ export class BlogPostService {
   
   createBlogPost(data: AddBlogPostRequest): Observable<BlogPost>
   {
-    return this.http.post<BlogPost>(`${this.apiBaseUrl}/api/BlogPost`, data)
+    return this.http.post<BlogPost>(`${this.apiBaseUrl}/api/BlogPost`, data, {
+      withCredentials: true
+    })
   }
 
   getAllBlogPosts(): HttpResourceRef<BlogPost[] | undefined>
@@ -34,12 +36,16 @@ export class BlogPostService {
 
   updateBlogPost(id:string, body: UpdateBlogPostRequest): Observable<BlogPost>
   {
-    return this.http.put<BlogPost>(`${this.apiBaseUrl}/api/BlogPost/${id}`, body);
+    return this.http.put<BlogPost>(`${this.apiBaseUrl}/api/BlogPost/${id}`, body, {
+      withCredentials:true
+    });
   }
 
   deleteBlogPost(id:string): Observable<BlogPost>
   {
-    return this.http.delete<BlogPost>(`${this.apiBaseUrl}/api/BlogPost/${id}`);
+    return this.http.delete<BlogPost>(`${this.apiBaseUrl}/api/BlogPost/${id}`, {
+      withCredentials: true
+    });
   }
 
 }
